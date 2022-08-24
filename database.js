@@ -17,12 +17,21 @@ const Article = mongoose.model('Article', articleSchema);
 async function getArticles() {
   await mongoose.connect(this.connectionString);
 
-  // eslint-disable-next-line array-callback-return
   const articles = await Article.find();
 
   await mongoose.connection.close();
 
   return articles;
+}
+
+async function getArticleById(articleID) {
+  await mongoose.connect(this.connectionString);
+
+  const article = await Article.findById({ _id: articleID });
+
+  await mongoose.connection.close();
+
+  return article;
 }
 
 async function postNewArticle(title, content) {
@@ -31,7 +40,8 @@ async function postNewArticle(title, content) {
   const article = await new Article({
     title,
     content,
-  }).save();
+  })
+    .save();
 
   await mongoose.connection.close();
 
@@ -40,4 +50,5 @@ async function postNewArticle(title, content) {
 
 module.exports = Database;
 Database.prototype.getArticles = getArticles;
+Database.prototype.getArticleById = getArticleById;
 Database.prototype.postNewArticle = postNewArticle;

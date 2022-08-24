@@ -12,9 +12,13 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
+// requests to Root Route
 app.get('/', (req, res) => {
   res.send('Hello world');
 });
+
+/* eslint-disable-next-line */
+///////////////////////////////////////////// Request for all article /////////////////////////////////////////////
 
 app.route('/articles')
   .get((req, res) => {
@@ -37,6 +41,23 @@ app.route('/articles')
   })
   .delete((req, res) => {
     res.status(401).send();
+  });
+
+/* eslint-disable-next-line */
+///////////////////////////////////////////// Request for articles by ID /////////////////////////////////////////////
+
+app.route('/articles/:articleId')
+  .get((req, res) => {
+    db.getArticleById(req.params.articleId)
+      .then((article) => {
+        res.send(article);
+      })
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+        }
+        res.status(500).send(err);
+      });
   });
 
 // eslint-disable-next-line no-bitwise
