@@ -1,0 +1,12 @@
+#nodejs
+node_modules
+
+#intelij
+.idea
+
+#helper tools
+.eslintrc
+.prettierrc
+
+#mac stuff
+.DS_Store
