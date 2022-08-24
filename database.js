@@ -28,14 +28,14 @@ async function getArticles() {
 async function postNewArticle(title, content) {
   await mongoose.connect(this.connectionString);
 
-  const article = new Article({
+  const article = await new Article({
     title,
     content,
-  });
-
-  await article.save();
+  }).save();
 
   await mongoose.connection.close();
+
+  return article;
 }
 
 module.exports = Database;

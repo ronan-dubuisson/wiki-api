@@ -22,7 +22,7 @@ app.get('/articles', (req, res) => {
       res.send(articles);
     })
     .catch((err) => {
-      res.send(err);
+      res.status(500).send(err);
     });
 });
 
