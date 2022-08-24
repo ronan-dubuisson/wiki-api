@@ -16,25 +16,28 @@ app.get('/', (req, res) => {
   res.send('Hello world');
 });
 
-app.get('/articles', (req, res) => {
-  db.getArticles()
-    .then((articles) => {
-      res.send(articles);
-    })
-    .catch((err) => {
-      res.status(500).send(err);
-    });
-});
-
-app.post('/articles', (req, res) => {
-  db.postNewArticle(req.body.title, req.body.content)
-    .then((savedArticle) => {
-      res.send(savedArticle);
-    })
-    .catch((err) => {
-      res.status(400).send(err);
-    });
-});
+app.route('/articles')
+  .get((req, res) => {
+    db.getArticles()
+      .then((articles) => {
+        res.send(articles);
+      })
+      .catch((err) => {
+        res.status(500).send(err);
+      });
+  })
+  .post((req, res) => {
+    db.postNewArticle(req.body.title, req.body.content)
+      .then((savedArticle) => {
+        res.send(savedArticle);
+      })
+      .catch((err) => {
+        res.status(400).send(err);
+      });
+  })
+  .delete((req, res) => {
+    res.status(401).send();
+  });
 
 // eslint-disable-next-line no-bitwise
 app.listen(process.env.PORT | 3000, () => {
