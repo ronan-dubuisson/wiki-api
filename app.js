@@ -50,11 +50,15 @@ app.route('/articles/:articleId')
   .get((req, res) => {
     db.getArticleById(req.params.articleId)
       .then((article) => {
-        res.send(article);
+        if (!article) {
+          res.status(404).send();
+        } else {
+          res.send(article);
+        }
       })
       .catch((err) => {
         if (err.name === 'CastError') {
-          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+          res.status(400).send(err);
         } else {
           res.status(500).send(err);
         }
@@ -63,11 +67,15 @@ app.route('/articles/:articleId')
   .put((req, res) => {
     db.replaceArticleById(req.params.articleId, req.body)
       .then((oldArticle) => {
-        res.send(oldArticle);
+        if (!oldArticle) {
+          res.status(404).send();
+        } else {
+          res.send(oldArticle);
+        }
       })
       .catch((err) => {
         if (err.name === 'CastError') {
-          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+          res.status(400).send(err);
         } else {
           res.status(500).send(err);
         }
@@ -75,11 +83,15 @@ app.route('/articles/:articleId')
   }).patch((req, res) => {
     db.updateArticleById(req.params.articleId, req.body)
       .then((beforeUpdate) => {
-        res.send(beforeUpdate);
+        if (!beforeUpdate) {
+          res.status(404).send();
+        } else {
+          res.send(beforeUpdate);
+        }
       })
       .catch((err) => {
         if (err.name === 'CastError') {
-          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+          res.status(400).send(err);
         } else {
           res.status(500).send(err);
         }
@@ -88,11 +100,15 @@ app.route('/articles/:articleId')
   .delete((req, res) => {
     db.deleteArticleById(req.params.articleId)
       .then((removedArticle) => {
-        res.send(removedArticle);
+        if (!removedArticle) {
+          res.status(404).send();
+        } else {
+          res.send(removedArticle);
+        }
       })
       .catch((err) => {
         if (err.name === 'CastError') {
-          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+          res.status(400).send(`Article with _id = ${req.params.articleId} could not be found!`);
         } else {
           res.status(500).send(err);
         }
