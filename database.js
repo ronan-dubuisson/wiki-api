@@ -71,9 +71,20 @@ async function updateArticleById(_id, update) {
   return article;
 }
 
+async function deleteArticleById(_id) {
+  await mongoose.connect(this.connectionString);
+
+  const article = await Article.findByIdAndRemove(_id);
+
+  await mongoose.connection.close();
+
+  return article;
+}
+
 module.exports = Database;
 Database.prototype.getArticles = getArticles;
 Database.prototype.getArticleById = getArticleById;
 Database.prototype.postNewArticle = postNewArticle;
 Database.prototype.replaceArticleById = replaceArticleById;
 Database.prototype.updateArticleById = updateArticleById;
+Database.prototype.deleteArticleById = deleteArticleById;

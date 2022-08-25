@@ -84,6 +84,19 @@ app.route('/articles/:articleId')
           res.status(500).send(err);
         }
       });
+  })
+  .delete((req, res) => {
+    db.deleteArticleById(req.params.articleId)
+      .then((removedArticle) => {
+        res.send(removedArticle);
+      })
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+        } else {
+          res.status(500).send(err);
+        }
+      });
   });
 
 // eslint-disable-next-line no-bitwise
