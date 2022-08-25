@@ -4,7 +4,7 @@ node_modules
 #intelij
 .idea
 
-#helper tools
+#code formatting configuration
 .eslintrc
 .prettierrc
 

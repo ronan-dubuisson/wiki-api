@@ -48,7 +48,20 @@ async function postNewArticle(title, content) {
   return article;
 }
 
+async function findAndReplaceArticle(_id, replacement) {
+  await mongoose.connect(this.connectionString);
+
+  const filter = { _id };
+
+  const article = await Article.findOneAndReplace(filter, replacement);
+
+  await mongoose.connection.close();
+
+  return article;
+}
+
 module.exports = Database;
 Database.prototype.getArticles = getArticles;
 Database.prototype.getArticleById = getArticleById;
 Database.prototype.postNewArticle = postNewArticle;
+Database.prototype.findAndReplaceArticle = findAndReplaceArticle;

@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 /* eslint-disable-next-line */
-///////////////////////////////////////////// Request for all article /////////////////////////////////////////////
+///////////////////////////////////////////// Request for all articles /////////////////////////////////////////////
 
 app.route('/articles')
   .get((req, res) => {
@@ -51,6 +51,19 @@ app.route('/articles/:articleId')
     db.getArticleById(req.params.articleId)
       .then((article) => {
         res.send(article);
+      })
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+        } else {
+          res.status(500).send(err);
+        }
+      });
+  })
+  .put((req, res) => {
+    db.findAndReplaceArticle(req.params.articleId, req.body)
+      .then((oldArticle) => {
+        res.status(200).send(oldArticle);
       })
       .catch((err) => {
         if (err.name === 'CastError') {
