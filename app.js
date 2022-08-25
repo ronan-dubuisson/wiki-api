@@ -24,14 +24,18 @@ app.route('/articles')
   .get((req, res) => {
     db.getArticles()
       .then((articles) => {
-        res.send(articles);
+        if (articles.length === 0) {
+          res.status(404).send('no articles in the collection');
+        } else {
+          res.send(articles);
+        }
       })
       .catch((err) => {
         res.status(500).send(err);
       });
   })
   .post((req, res) => {
-    db.postNewArticle(req.body.title, req.body.content)
+    db.postNewArticle(req.body)
       .then((savedArticle) => {
         res.send(savedArticle);
       })

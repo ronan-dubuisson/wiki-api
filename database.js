@@ -34,14 +34,10 @@ async function getArticleById(articleID) {
   return article;
 }
 
-async function postNewArticle(title, content) {
+async function postNewArticle(document) {
   await mongoose.connect(this.connectionString);
 
-  const article = await new Article({
-    title,
-    content,
-  })
-    .save();
+  const article = await new Article(document).save();
 
   await mongoose.connection.close();
 
