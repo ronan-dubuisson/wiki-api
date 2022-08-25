@@ -61,9 +61,21 @@ app.route('/articles/:articleId')
       });
   })
   .put((req, res) => {
-    db.findAndReplaceArticle(req.params.articleId, req.body)
+    db.replaceArticleById(req.params.articleId, req.body)
       .then((oldArticle) => {
-        res.status(200).send(oldArticle);
+        res.send(oldArticle);
+      })
+      .catch((err) => {
+        if (err.name === 'CastError') {
+          res.status(404).send(`Article with _id = ${req.params.articleId} could not be found!`);
+        } else {
+          res.status(500).send(err);
+        }
+      });
+  }).patch((req, res) => {
+    db.updateArticleById(req.params.articleId, req.body)
+      .then((beforeUpdate) => {
+        res.send(beforeUpdate);
       })
       .catch((err) => {
         if (err.name === 'CastError') {

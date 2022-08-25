@@ -48,12 +48,23 @@ async function postNewArticle(title, content) {
   return article;
 }
 
-async function findAndReplaceArticle(_id, replacement) {
+async function replaceArticleById(_id, replacement) {
   await mongoose.connect(this.connectionString);
 
   const filter = { _id };
+  const options = { returnDocument: 'after' };
+  const article = await Article.findOneAndReplace(filter, replacement, options);
 
-  const article = await Article.findOneAndReplace(filter, replacement);
+  await mongoose.connection.close();
+
+  return article;
+}
+
+async function updateArticleById(_id, update) {
+  await mongoose.connect(this.connectionString);
+
+  const options = { returnDocument: 'after' };
+  const article = await Article.findByIdAndUpdate(_id, update, options);
 
   await mongoose.connection.close();
 
@@ -64,4 +75,5 @@ module.exports = Database;
 Database.prototype.getArticles = getArticles;
 Database.prototype.getArticleById = getArticleById;
 Database.prototype.postNewArticle = postNewArticle;
-Database.prototype.findAndReplaceArticle = findAndReplaceArticle;
+Database.prototype.replaceArticleById = replaceArticleById;
+Database.prototype.updateArticleById = updateArticleById;
